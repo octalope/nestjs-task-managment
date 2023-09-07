@@ -1,0 +1,6 @@
+# @name createTask 
+POST http://127.0.0.1:3000/auth/signup
+Content-Type: application/x-www-form-urlencoded
+
+username=sbrooks
+&password=Panama1!
