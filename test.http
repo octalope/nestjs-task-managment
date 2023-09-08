@@ -1,0 +1,58 @@
+# @name signup 
+POST http://127.0.0.1:3000/auth/signup
+Content-Type: application/x-www-form-urlencoded
+
+username=cate
+&password=Panama1!
+
+###
+
+# @name login
+POST http://127.0.0.1:3000/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=cate
+&password=Panama1!
+
+###
+
+@accessToken = {{login.response.body.accessToken}}
+
+###
+
+GET http://127.0.0.1:3000/tasks
+Authorization: Bearer {{accessToken}}
+
+###
+
+# @name createTask 
+POST http://127.0.0.1:3000/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/x-www-form-urlencoded
+
+title=steve
+&description=oof!!
+
+###
+
+@id = {{createTask.response.body.id}}
+
+###
+
+GET http://127.0.0.1:3000/tasks/{{id}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+PATCH http://127.0.0.1:3000/tasks/{{id}}/status
+Authorization: Bearer {{accessToken}}
+Content-Type: application/x-www-form-urlencoded
+
+status=IN_PROGRESS
+
+###
+
+DELETE http://127.0.0.1:3000/tasks/{{id}}
+Authorization: Bearer {{accessToken}}
+
+###
