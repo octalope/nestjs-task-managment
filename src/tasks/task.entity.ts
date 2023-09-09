@@ -1,10 +1,26 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
+import { Id } from '../util/id';
 import { TaskStatus } from './task-status.enum';
+import { User } from 'src/auth/user.entity';
 
 @Entity()
 export class Task {
-  @PrimaryGeneratedColumn('uuid')
+  // @PrimaryGeneratedColumn('uuid')
+  // id: string;
+
+  @PrimaryColumn()
   id: string;
+
+  @BeforeInsert()
+  private beforeInsert() {
+    this.id = Id.create();
+  }
 
   @Column()
   title: string;
@@ -14,4 +30,7 @@ export class Task {
 
   @Column()
   status: TaskStatus;
+
+  @ManyToOne((/* _type */) => User, (user) => user.tasks, { eager: false })
+  user: User;
 }

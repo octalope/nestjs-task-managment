@@ -30,8 +30,8 @@ POST http://127.0.0.1:3000/tasks
 Authorization: Bearer {{accessToken}}
 Content-Type: application/x-www-form-urlencoded
 
-title=steve
-&description=oof!!
+title=Something to do
+&description=feed the cats
 
 ###
 
