@@ -1,4 +1,13 @@
-# @name signup 
+# @name signupUser1 
+POST http://127.0.0.1:3000/auth/signup
+Content-Type: application/x-www-form-urlencoded
+
+username=steve
+&password=Argentina!
+
+###
+
+# @name signupUser2 
 POST http://127.0.0.1:3000/auth/signup
 Content-Type: application/x-www-form-urlencoded
 
@@ -7,7 +16,20 @@ username=cate
 
 ###
 
-# @name login
+# @name loginUser1
+POST http://127.0.0.1:3000/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=steve
+&password=Argentina!
+
+###
+
+@accessToken1 = {{loginUser1.response.body.accessToken}}
+
+###
+
+# @name loginUser2
 POST http://127.0.0.1:3000/auth/login
 Content-Type: application/x-www-form-urlencoded
 
@@ -16,18 +38,13 @@ username=cate
 
 ###
 
-@accessToken = {{login.response.body.accessToken}}
+@accessToken2 = {{loginUser2.response.body.accessToken}}
 
 ###
 
-GET http://127.0.0.1:3000/tasks
-Authorization: Bearer {{accessToken}}
-
-###
-
-# @name createTask 
+# @name createTask User1 
 POST http://127.0.0.1:3000/tasks
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{accessToken1}}
 Content-Type: application/x-www-form-urlencoded
 
 title=Something to do
@@ -35,12 +52,31 @@ title=Something to do
 
 ###
 
+# @name createTask User2 
+POST http://127.0.0.1:3000/tasks
+Authorization: Bearer {{accessToken2}}
+Content-Type: application/x-www-form-urlencoded
+
+title=TODO
+&description=feed the dogs
+
+###
 @id = {{createTask.response.body.id}}
+
+### 
+
+GET http://127.0.0.1:3000/tasks
+Authorization: Bearer {{accessToken1}}
+
+### 
+
+GET http://127.0.0.1:3000/tasks
+Authorization: Bearer {{accessToken2}}
 
 ###
 
 GET http://127.0.0.1:3000/tasks/{{id}}
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{accessToken1}}
 
 ###
 
