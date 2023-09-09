@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -8,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -47,6 +49,7 @@ export class TasksController {
     return await this.tasksService.updateTaskStatus(id, status);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   createTask(@Body() createTaskDto: CreateTaskDto, @GetUser() user: User) {
     return this.tasksService.createTask(createTaskDto, user);

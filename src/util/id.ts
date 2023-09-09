@@ -1,9 +1,10 @@
-import * as crypto from 'crypto';
+import { v4 as uuid } from 'uuid';
 
 export class Id {
   static create(): string {
-    return crypto
-      .randomBytes(16)
+    const byteString = uuid().replaceAll('-', '');
+    const bytes = Buffer.from(byteString, 'hex');
+    return bytes
       .toString('base64')
       .replaceAll('+', '-')
       .replaceAll('/', '_')

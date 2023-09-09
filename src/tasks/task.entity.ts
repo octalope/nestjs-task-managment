@@ -8,6 +8,7 @@ import {
 import { Id } from '../util/id';
 import { TaskStatus } from './task-status.enum';
 import { User } from 'src/auth/user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Task {
@@ -32,5 +33,6 @@ export class Task {
   status: TaskStatus;
 
   @ManyToOne((/* _type */) => User, (user) => user.tasks, { eager: false })
+  @Exclude()
   user: User;
 }
