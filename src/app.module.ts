@@ -28,9 +28,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        console.log(`.env.stage.${process.env.STAGE}`);
-
-        const result: TypeOrmModuleOptions = {
+        return {
           type: 'postgres',
           autoLoadEntities: true,
           synchronize: true,
@@ -40,8 +38,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
         };
-        console.log(result);
-        return result;
       },
     }),
   ],
