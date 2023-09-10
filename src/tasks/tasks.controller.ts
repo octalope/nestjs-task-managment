@@ -19,10 +19,12 @@ import { Task } from './task.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
+import { Logger } from '@nestjs/common';
 
 @Controller('tasks')
 @UseGuards(AuthGuard('jwt'))
 export class TasksController {
+  private logger = new Logger('TasksController');
   constructor(private tasksService: TasksService) {}
 
   @Get()
@@ -30,31 +32,43 @@ export class TasksController {
     @Query() filterDto: GetTaskFilterDto,
     @GetUser() user: User,
   ): Promise<Task[]> {
+    this.logger.verbose({ filterDto, user }, 'getTasks');
     return await this.tasksService.getTasks(filterDto, user);
   }
 
   @Get('/:id')
-  async getTaskById(@Param('id') id: string): Promise<Task> {
-    return await this.tasksService.getTaskById(id);
+  async getTaskById(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<Task> {
+    this.logger.verbose({ id, user }, 'getTaskById');
+    return await this.tasksService.getTaskById(id, user);
   }
 
   @Delete('/:id')
-  async deleteTaskById(@Param('id') id: string): Promise<void> {
-    await this.tasksService.deleteTaskById(id);
+  async deleteTaskById(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<void> {
+    this.logger.verbose({ id, user }, 'deleteTaskById');
+    await this.tasksService.deleteTaskById(id, user);
   }
 
   @Patch('/:id/status')
   async updateTaskById(
     @Param('id') id: string,
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
+    @GetUser() user: User,
   ): Promise<Task> {
+    this.logger.verbose({ id, user }, 'updateTaskById');
     const { status } = updateTaskStatusDto;
-    return await this.tasksService.updateTaskStatus(id, status);
+    return await this.tasksService.updateTaskStatus(id, status, user);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   createTask(@Body() createTaskDto: CreateTaskDto, @GetUser() user: User) {
+    this.logger.verbose({ createTaskDto, user }, 'createTask');
     return this.tasksService.createTask(createTaskDto, user);
   }
 }

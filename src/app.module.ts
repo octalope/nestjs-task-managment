@@ -3,10 +3,16 @@ import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
     AuthModule,
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: process.env.LOG_LEVEL, // trace | debug | info | warn | error | fatal
+      },
+    }),
     TasksModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
