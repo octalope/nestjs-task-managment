@@ -32,7 +32,7 @@ export class TasksController {
     @Query() filterDto: GetTaskFilterDto,
     @GetUser() user: User,
   ): Promise<Task[]> {
-    this.logger.verbose({ filterDto, user }, 'getTasks');
+    this.logger.verbose({ filterDto, user: user.username }, 'getTasks');
     return await this.tasksService.getTasks(filterDto, user);
   }
 
@@ -41,7 +41,7 @@ export class TasksController {
     @Param('id') id: string,
     @GetUser() user: User,
   ): Promise<Task> {
-    this.logger.verbose({ id, user }, 'getTaskById');
+    this.logger.verbose({ id, user: user.username }, 'getTaskById');
     return await this.tasksService.getTaskById(id, user);
   }
 
@@ -50,7 +50,7 @@ export class TasksController {
     @Param('id') id: string,
     @GetUser() user: User,
   ): Promise<void> {
-    this.logger.verbose({ id, user }, 'deleteTaskById');
+    this.logger.verbose({ id, user: user.username }, 'deleteTaskById');
     await this.tasksService.deleteTaskById(id, user);
   }
 
@@ -60,7 +60,7 @@ export class TasksController {
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
     @GetUser() user: User,
   ): Promise<Task> {
-    this.logger.verbose({ id, user }, 'updateTaskById');
+    this.logger.verbose({ id, user: user.username }, 'updateTaskById');
     const { status } = updateTaskStatusDto;
     return await this.tasksService.updateTaskStatus(id, status, user);
   }
@@ -68,7 +68,7 @@ export class TasksController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   createTask(@Body() createTaskDto: CreateTaskDto, @GetUser() user: User) {
-    this.logger.verbose({ createTaskDto, user }, 'createTask');
+    this.logger.verbose({ createTaskDto, user: user.username }, 'createTask');
     return this.tasksService.createTask(createTaskDto, user);
   }
 }
